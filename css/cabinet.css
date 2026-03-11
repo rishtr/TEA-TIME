@@ -1,0 +1,183 @@
+/* ============================================================
+   cabinet.css — Arcade cabinet frame, corner decorations,
+                 glass dome, machine base, chute, score bar,
+                 and the insert-coin / pixel-line decorations.
+   ============================================================ */
+
+/* ── Arcade Cabinet Frame ──────────────────────────────────── */
+.arcade-cabinet {
+    position: relative;
+    padding: 12px;
+    background: var(--arcade-panel);
+    border: 4px solid var(--pixel-border);
+    box-shadow:
+        inset 0 0 30px rgba(0,255,247,0.05),
+        0 0 20px rgba(0,0,0,0.6),
+        0 0 1px var(--neon-cyan),
+        inset 2px 2px 0 rgba(255,255,255,0.05),
+        inset -2px -2px 0 rgba(0,0,0,0.3);
+    clip-path: polygon(
+        8px 0%, calc(100% - 8px) 0%,
+        100% 8px, 100% calc(100% - 8px),
+        calc(100% - 8px) 100%, 8px 100%,
+        0% calc(100% - 8px), 0% 8px
+    );
+}
+
+.arcade-cabinet::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border: 2px solid rgba(0,255,247,0.15);
+    clip-path: polygon(
+        8px 0%, calc(100% - 8px) 0%,
+        100% 8px, 100% calc(100% - 8px),
+        calc(100% - 8px) 100%, 8px 100%,
+        0% calc(100% - 8px), 0% 8px
+    );
+    pointer-events: none;
+}
+
+/* ── Corner Pixel Decorations ──────────────────────────────── */
+.corner-decor {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 6px var(--neon-cyan);
+    z-index: 5;
+}
+.corner-decor.tl { top: 4px;    left: 4px;   }
+.corner-decor.tr { top: 4px;    right: 4px;  }
+.corner-decor.bl { bottom: 4px; left: 4px;   }
+.corner-decor.br { bottom: 4px; right: 4px;  }
+
+/* ── Glass Dome ────────────────────────────────────────────── */
+.glass-dome {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 30% 30%, rgba(0,255,247,0.06), rgba(0,0,0,0.1) 50%, transparent 70%);
+    border: 3px solid rgba(0,255,247,0.2);
+    box-shadow:
+        inset 0 0 50px rgba(0,255,247,0.04),
+        0 0 25px rgba(0,255,247,0.1),
+        0 0 60px rgba(0,255,247,0.03);
+    overflow: hidden;
+}
+
+/* Large glass highlight */
+.glass-dome::before {
+    content: '';
+    position: absolute;
+    top: 8%; left: 15%;
+    width: 35%; height: 20%;
+    background: radial-gradient(ellipse, rgba(0,255,247,0.1), transparent);
+    border-radius: 50%;
+    transform: rotate(-20deg);
+    pointer-events: none;
+}
+
+/* Small specular glint */
+.glass-dome::after {
+    content: '';
+    position: absolute;
+    top: 5%; right: 20%;
+    width: 10%; height: 8%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.15), transparent);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+canvas#ball-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+}
+
+/* ── Machine Base ──────────────────────────────────────────── */
+.machine-base {
+    width: 320px;
+    height: 80px;
+    background: linear-gradient(180deg, #1a1a40, #10102a, #0a0a1e);
+    margin-top: -24px;
+    position: relative;
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.6),
+        inset 0 2px 0 rgba(0,255,247,0.08);
+    border: 2px solid var(--pixel-border);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Blinking arrows on the base */
+.machine-base::before {
+    content: '▼ ▼ ▼';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 6px var(--neon-cyan);
+    letter-spacing: 8px;
+    animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+}
+
+/* ── Chute (exit slot on base) ─────────────────────────────── */
+.chute {
+    position: absolute;
+    right: -50px; top: -16px;
+    width: 50px; height: 44px;
+    background: linear-gradient(180deg, #1a1a40, #10102a);
+    border: 2px solid var(--pixel-border);
+    border-left: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chute::after {
+    content: '►';
+    font-size: 0.6rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 6px var(--neon-green);
+    animation: blink 1s infinite;
+}
+
+/* ── Score Bar (BALLS / PICKED / ROUND) ────────────────────── */
+.score-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 8px 20px;
+    background: rgba(0,0,0,0.4);
+    border: 2px solid var(--pixel-border);
+    font-size: 0.55rem;
+}
+
+.score-bar .label { color: rgba(255,255,255,0.4); }
+.score-bar .value {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 6px var(--neon-yellow);
+}
+
+/* ── Insert Coin / Pixel Line Decorations ──────────────────── */
+.insert-coin {
+    font-size: 0.45rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: blink 1.5s infinite;
+    margin-top: 4px;
+}
+
+.pixel-line        { display: flex; gap: 4px; justify-content: center; }
+.pixel-line span   { width: 6px; height: 6px; display: inline-block; }

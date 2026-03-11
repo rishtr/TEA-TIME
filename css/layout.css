@@ -1,0 +1,155 @@
+/* ============================================================
+   layout.css — Side-by-side main layout, side panel,
+                panel sections, title block, settings inputs,
+                and responsive breakpoints.
+   ============================================================ */
+
+/* ── Main Layout ───────────────────────────────────────────── */
+.main-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    justify-content: center;
+}
+
+/* ── Side Panel ────────────────────────────────────────────── */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 260px;
+    max-width: 320px;
+    background: var(--arcade-panel);
+    border: 3px solid var(--pixel-border);
+    padding: 16px;
+    clip-path: polygon(
+        6px 0%, calc(100% - 6px) 0%,
+        100% 6px, 100% calc(100% - 6px),
+        calc(100% - 6px) 100%, 6px 100%,
+        0% calc(100% - 6px), 0% 6px
+    );
+    box-shadow:
+        inset 0 0 20px rgba(0,255,247,0.04),
+        0 0 15px rgba(0,0,0,0.5);
+    align-self: stretch;
+}
+
+.panel-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.45rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 6px var(--neon-cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 1px solid var(--pixel-border);
+    padding-bottom: 6px;
+    width: 100%;
+}
+
+.side-panel .controls { flex-direction: column; width: 100%; }
+.side-panel .btn      { width: 100%; }
+.side-panel .history  { max-width: 280px; }
+
+.side-panel .insert-coin {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--pixel-border);
+    text-align: center;
+    line-height: 1.6;
+    font-size: 0.7rem;
+    word-spacing: 2px;
+}
+
+/* ── Title Block ───────────────────────────────────────────── */
+.title-block {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.show-name {
+    font-size: 1.6rem;
+    font-family: 'Press Start 2P', monospace;
+    color: var(--neon-cyan);
+    text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 30px rgba(0,255,247,0.4),
+        0 0 60px rgba(0,255,247,0.15);
+    letter-spacing: 3px;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+    from { text-shadow: 0 0 10px var(--neon-cyan), 0 0 30px rgba(0,255,247,0.4); }
+    to   { text-shadow: 0 0 15px var(--neon-cyan), 0 0 45px rgba(0,255,247,0.6), 0 0 80px rgba(0,255,247,0.2); }
+}
+
+.subtitle {
+    font-size: 0.55rem;
+    color: var(--neon-pink);
+    text-shadow: 0 0 8px var(--neon-pink);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+/* ── Settings (MIN / MAX inputs) ───────────────────────────── */
+.settings {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.setting-group label {
+    font-size: 0.5rem;
+    color: rgba(0,255,247,0.5);
+}
+
+.setting-group input {
+    width: 70px;
+    padding: 8px 10px;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid var(--pixel-border);
+    color: var(--neon-yellow);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.65rem;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.3s;
+    text-shadow: 0 0 6px var(--neon-yellow);
+}
+
+.setting-group input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0,255,247,0.2);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 850px) {
+    .main-layout { flex-direction: column; align-items: center; }
+    .side-panel  { min-width: unset; max-width: 440px; width: 100%; }
+    .side-panel .controls { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .side-panel .btn      { width: auto; }
+    .glass-dome   { width: 300px; height: 300px; }
+    .machine-base { width: 240px; height: 60px; }
+    .show-name    { font-size: 1rem; }
+    .btn          { padding: 10px 18px; font-size: 0.6rem; }
+}

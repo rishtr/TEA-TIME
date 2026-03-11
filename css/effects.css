@@ -1,0 +1,38 @@
+/* ============================================================
+   effects.css — Canvas layers (confetti, particle emitter),
+                 pixel particle animation.
+   ============================================================ */
+
+/* ── Confetti Canvas ───────────────────────────────────────── */
+/* Full-page fixed layer — overlays everything during a pick */
+#confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* ── Pixel Particle Emitter (around the dome) ──────────────── */
+.pixel-particles {
+    position: absolute;
+    inset: -10px;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.pixel-particle {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--neon-cyan);
+    opacity: 0;
+    animation: floatPixel 4s ease-in-out infinite;
+}
+
+@keyframes floatPixel {
+    0%   { opacity: 0;   transform: translateY(0)     scale(0.5); }
+    30%  { opacity: 0.7; }
+    70%  { opacity: 0.3; }
+    100% { opacity: 0;   transform: translateY(-60px) scale(0.2); }
+}

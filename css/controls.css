@@ -1,0 +1,128 @@
+/* ============================================================
+   controls.css — Buttons (PICK, RESET, BRACKET, BACK),
+                  controls row, spin status label.
+   ============================================================ */
+
+/* ── Controls Row ──────────────────────────────────────────── */
+.controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ── Base Button ───────────────────────────────────────────── */
+.btn {
+    padding: 14px 28px;
+    border: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+/* ── PICK Button (neon pink) ───────────────────────────────── */
+.btn-pick {
+    background: var(--neon-pink);
+    color: #fff;
+    border: 3px solid #ff5a93;
+    box-shadow:
+        0 4px 0 #aa1045,
+        0 6px 20px rgba(255,45,117,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    clip-path: polygon(
+        4px 0%, calc(100% - 4px) 0%,
+        100% 4px, 100% calc(100% - 4px),
+        calc(100% - 4px) 100%, 4px 100%,
+        0% calc(100% - 4px), 0% 4px
+    );
+}
+.btn-pick:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 0 #aa1045,
+        0 8px 30px rgba(255,45,117,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.btn-pick:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #aa1045, 0 2px 10px rgba(255,45,117,0.3);
+}
+.btn-pick:disabled {
+    background: #333;
+    border-color: #444;
+    box-shadow: 0 4px 0 #222;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    transform: none;
+}
+
+/* ── RESET Button (dark panel) ─────────────────────────────── */
+.btn-reset {
+    background: var(--arcade-panel);
+    color: var(--neon-cyan);
+    border: 2px solid var(--pixel-border);
+    box-shadow: 0 3px 0 #0a0a1a, inset 0 1px 0 rgba(0,255,247,0.1);
+    clip-path: polygon(
+        4px 0%, calc(100% - 4px) 0%,
+        100% 4px, 100% calc(100% - 4px),
+        calc(100% - 4px) 100%, 4px 100%,
+        0% calc(100% - 4px), 0% 4px
+    );
+}
+.btn-reset:hover  { background: rgba(0,255,247,0.1); border-color: var(--neon-cyan); }
+.btn-reset:active { transform: translateY(2px); box-shadow: 0 1px 0 #0a0a1a; }
+
+/* ── BRACKET Button (purple) ───────────────────────────────── */
+.btn-bracket {
+    background: var(--neon-purple);
+    color: #fff;
+    border: 3px solid #d07aff;
+    box-shadow:
+        0 4px 0 #7a2ea0,
+        0 6px 20px rgba(191,90,242,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    clip-path: polygon(
+        4px 0%, calc(100% - 4px) 0%,
+        100% 4px, 100% calc(100% - 4px),
+        calc(100% - 4px) 100%, 4px 100%,
+        0% calc(100% - 4px), 0% 4px
+    );
+}
+.btn-bracket:hover    { transform: translateY(-2px); box-shadow: 0 6px 0 #7a2ea0, 0 8px 30px rgba(191,90,242,0.6); }
+.btn-bracket:active   { transform: translateY(2px);  box-shadow: 0 1px 0 #7a2ea0; }
+.btn-bracket:disabled { background: #333; border-color: #444; box-shadow: 0 4px 0 #222; cursor: not-allowed; filter: grayscale(1); }
+
+/* ── BACK Button (used in overlays) ───────────────────────── */
+.btn-back {
+    background: rgba(255,255,255,0.06);
+    color: var(--neon-cyan);
+    border: 2px solid var(--pixel-border);
+    margin-top: 20px;
+    padding: 12px 24px;
+    clip-path: polygon(
+        4px 0%, calc(100% - 4px) 0%,
+        100% 4px, 100% calc(100% - 4px),
+        calc(100% - 4px) 100%, 4px 100%,
+        0% calc(100% - 4px), 0% 4px
+    );
+}
+.btn-back:hover { background: rgba(0,255,247,0.1); border-color: var(--neon-cyan); }
+
+/* ── Spin Status Label ─────────────────────────────────────── */
+.spin-label {
+    font-size: 0.6rem;
+    font-family: 'Press Start 2P', monospace;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px var(--neon-yellow);
+    animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    from { opacity: 0.4; }
+    to   { opacity: 1; }
+}

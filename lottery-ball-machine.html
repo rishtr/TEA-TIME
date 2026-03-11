@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEA TIMEZONE IST – Random Picker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheets — order matters: base tokens must load first -->
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/cabinet.css" />
+    <link rel="stylesheet" href="css/balls.css" />
+    <link rel="stylesheet" href="css/controls.css" />
+    <link rel="stylesheet" href="css/overlays.css" />
+    <link rel="stylesheet" href="css/effects.css" />
+  </head>
+  <body>
+    <button
+      class="history-btn"
+      id="historyBtn"
+      onclick="openHistory()"
+      title="Tournament History"
+    >
+      HISTORY <span class="badge" id="historyBadge">0</span>
+    </button>
+    <button
+      class="fullscreen-btn"
+      id="fullscreenBtn"
+      onclick="toggleFullscreen()"
+      title="Toggle Fullscreen"
+    >
+      ⛶
+    </button>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="app-container">
+      <!-- Title -->
+      <div class="title-block">
+        <div class="show-name">TEA TIMEZONE IST</div>
+        <div class="subtitle">⬥ random picker ⬥</div>
+      </div>
+
+      <!-- Settings -->
+      <div class="settings">
+        <div class="setting-group">
+          <label for="minNum">MIN</label>
+          <input type="number" id="minNum" value="1" min="0" max="999" />
+        </div>
+        <div class="setting-group">
+          <label for="maxNum">MAX</label>
+          <input type="number" id="maxNum" value="150" min="1" max="999" />
+        </div>
+      </div>
+
+      <!-- Main Content: Side by Side -->
+      <div class="main-layout">
+        <!-- LEFT: Arcade Cabinet -->
+        <div class="arcade-cabinet">
+          <div class="corner-decor tl"></div>
+          <div class="corner-decor tr"></div>
+          <div class="corner-decor bl"></div>
+          <div class="corner-decor br"></div>
+
+          <div class="machine-wrapper">
+            <div class="glass-dome">
+              <div class="pixel-particles" id="pixelParticles"></div>
+              <canvas id="ball-canvas" width="840" height="840"></canvas>
+            </div>
+            <div class="machine-base">
+              <div class="chute"></div>
+            </div>
+          </div>
+
+          <!-- Score Bar -->
+          <div class="score-bar">
+            <span
+              ><span class="label">BALLS:</span>
+              <span class="value" id="ballCount">50</span></span
+            >
+            <span
+              ><span class="label">PICKED:</span>
+              <span class="value" id="pickedCount">0</span></span
+            >
+            <span
+              ><span class="label">ROUND:</span>
+              <span class="value" id="roundNum">1</span></span
+            >
+          </div>
+        </div>
+
+        <!-- RIGHT: Side Panel -->
+        <div class="side-panel">
+          <div class="panel-section">
+            <div class="panel-label">LAST PICKED</div>
+            <div id="spin-status"></div>
+            <div id="picked-ball" class="picked-ball"></div>
+          </div>
+
+          <div class="panel-section">
+            <div class="panel-label">HISTORY</div>
+            <div class="history" id="history"></div>
+          </div>
+
+          <div class="panel-section">
+            <div class="controls">
+              <button class="btn btn-pick" id="pickBtn" onclick="startPick()">
+                PICK!
+              </button>
+              <button
+                class="btn btn-bracket"
+                id="bracketBtn"
+                onclick="openBracket()"
+                disabled
+              >
+                BRACKET
+              </button>
+              <button class="btn btn-reset" onclick="resetMachine()">
+                RESET
+              </button>
+            </div>
+          </div>
+
+          <div class="insert-coin">pick 2+ numbers then hit bracket</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bracket Overlay -->
+    <div class="bracket-overlay" id="bracketOverlay">
+      <div class="bracket-header">
+        <h2>🏆 TOURNAMENT BRACKET</h2>
+        <div class="bracket-sub">CLICK A PLAYER TO ADVANCE THEM</div>
+      </div>
+      <div class="bracket-container" id="bracketContainer"></div>
+      <div class="podium-display" id="podiumDisplay">
+        <div class="podium-place podium-2nd">
+          <div class="podium-medal">🥈</div>
+          <div class="podium-label">2ND</div>
+          <div class="podium-number" id="podium2nd"></div>
+        </div>
+        <div class="podium-place podium-1st">
+          <div class="podium-medal">🥇</div>
+          <div class="podium-label">1ST</div>
+          <div class="podium-number" id="podium1st"></div>
+        </div>
+      </div>
+      <div class="podium-save-msg" id="podiumSaveMsg" style="display: none">
+        ✓ SAVED TO HISTORY
+      </div>
+      <button
+        class="btn btn-save-tournament"
+        id="saveTournamentBtn"
+        onclick="saveTournamentToHistory()"
+        style="display: none"
+      >
+        💾 SAVE TO HISTORY
+      </button>
+      <button class="btn btn-back" onclick="closeBracket()">
+        ◄ BACK TO PICKER
+      </button>
+    </div>
+
+    <!-- History Overlay -->
+    <div class="history-overlay" id="historyOverlay">
+      <h2>TOURNAMENT HISTORY</h2>
+      <div class="bracket-sub">PAST TOURNAMENT RESULTS</div>
+      <div class="tour-history-list" id="tourHistoryList"></div>
+      <button
+        class="btn btn-reset"
+        onclick="clearTournamentHistory()"
+        style="margin-top: 16px; font-size: 0.5rem"
+      >
+        CLEAR HISTORY
+      </button>
+      <button class="btn btn-back" onclick="closeHistory()">◄ BACK</button>
+    </div>
+
+    <!-- Scripts — order matters: each file depends on the ones above it -->
+    <script src="js/config.js"></script>
+    <!-- constants & color palette -->
+    <script src="js/storage.js"></script>
+    <!-- localStorage helpers -->
+    <script src="js/physics.js"></script>
+    <!-- Ball class, collisions, animation loop -->
+    <script src="js/tourHistory.js"></script>
+    <!-- tournament history overlay & badge -->
+    <script src="js/bracket.js"></script>
+    <!-- tournament bracket system -->
+    <script src="js/game.js"></script>
+    <!-- pick logic, history, reset, confetti, startup -->
+    <script src="js/ui.js"></script>
+    <!-- fullscreen toggle -->
+  </body>
+</html>

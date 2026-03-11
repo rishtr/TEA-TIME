@@ -1,0 +1,76 @@
+/* ============================================================
+   base.css — CSS variables, reset, body, background effects,
+               and the top-level app container.
+   Loaded first — all other CSS files depend on these variables.
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+:root {
+    --neon-pink:    #ff2d75;
+    --neon-cyan:    #00fff7;
+    --neon-yellow:  #ffe600;
+    --neon-green:   #39ff14;
+    --neon-purple:  #bf5af2;
+    --neon-orange:  #ff9f1c;
+    --arcade-dark:  #0a0a1a;
+    --arcade-panel: #12122a;
+    --pixel-border: #2a2a5a;
+}
+
+/* ── Body ──────────────────────────────────────────────────── */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--arcade-dark);
+    font-family: 'Press Start 2P', monospace;
+    overflow-x: hidden;
+    color: #fff;
+    image-rendering: pixelated;
+}
+
+/* Animated pixel grid background */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0,255,247,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,247,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* CRT scanlines overlay */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.12) 0px,
+        rgba(0,0,0,0.12) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* ── App Container ─────────────────────────────────────────── */
+.app-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+}

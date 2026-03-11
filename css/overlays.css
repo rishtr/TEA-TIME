@@ -1,0 +1,269 @@
+/* ============================================================
+   overlays.css — Tournament bracket overlay, bracket grid,
+                  match slots, podium, history button, history
+                  overlay, and tournament history list items.
+   ============================================================ */
+
+/* ── Fullscreen & History Buttons (fixed top-right) ─────────── */
+.fullscreen-btn {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 60;
+    width: 40px;
+    height: 40px;
+    background: rgba(18,18,42,0.85);
+    border: 2px solid var(--pixel-border);
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    clip-path: polygon(4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px), 0% 4px);
+}
+.fullscreen-btn:hover  { background: rgba(0,255,247,0.15); border-color: var(--neon-cyan); box-shadow: 0 0 12px rgba(0,255,247,0.3); transform: scale(1.1); }
+.fullscreen-btn:active { transform: scale(0.95); }
+
+.history-btn {
+    position: fixed;
+    top: 14px;
+    right: 62px;
+    z-index: 60;
+    height: 40px;
+    padding: 0 14px;
+    background: rgba(18,18,42,0.85);
+    border: 2px solid var(--pixel-border);
+    color: var(--neon-yellow);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    clip-path: polygon(4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px), 0% 4px);
+}
+.history-btn:hover { background: rgba(255,230,0,0.12); border-color: var(--neon-yellow); box-shadow: 0 0 12px rgba(255,230,0,0.25); }
+.history-btn .badge {
+    background: var(--neon-pink);
+    color: #fff;
+    font-size: 0.35rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    min-width: 16px;
+    text-align: center;
+}
+
+/* ── Bracket Overlay ───────────────────────────────────────── */
+.bracket-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,15,0.97);
+    z-index: 50;
+    overflow: auto;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+}
+.bracket-overlay.active { display: flex; }
+
+.bracket-header { text-align: center; margin-bottom: 20px; flex-shrink: 0; }
+.bracket-header h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.2rem;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 12px var(--neon-yellow);
+    margin-bottom: 8px;
+}
+.bracket-header .bracket-sub {
+    font-size: 0.45rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 2px;
+}
+
+.bracket-container {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 20px;
+    min-height: 300px;
+    overflow-x: auto;
+    max-width: 100vw;
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+    min-width: 140px;
+}
+
+.round-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.4rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 6px var(--neon-cyan);
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+}
+
+.match-pair {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* ── Match Slots ───────────────────────────────────────────── */
+.match-slot {
+    width: 120px;
+    padding: 8px 10px;
+    margin: 3px 0;
+    background: rgba(20,20,50,0.8);
+    border: 2px solid var(--pixel-border);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+.match-slot:hover:not(.bye):not(.empty):not(.eliminated) {
+    border-color: var(--neon-yellow);
+    box-shadow: 0 0 12px rgba(255,230,0,0.3);
+    transform: scale(1.05);
+}
+.match-slot.winner    { border-color: var(--neon-green);          background: rgba(57,255,20,0.12);  box-shadow: 0 0 10px rgba(57,255,20,0.25); }
+.match-slot.eliminated{ opacity: 0.35; text-decoration: line-through; cursor: default; }
+.match-slot.bye       { border-style: dashed; color: rgba(255,255,255,0.25); cursor: default; font-size: 0.55rem; font-family: 'Press Start 2P', monospace; }
+.match-slot.empty     { border-style: dashed; border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.15); cursor: default; font-size: 0.5rem; font-family: 'Press Start 2P', monospace; }
+.match-slot .slot-ball {
+    display: inline-block;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    line-height: 22px;
+    font-size: 0.65rem;
+    margin-right: 6px;
+    vertical-align: middle;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.match-vs { font-family: 'Press Start 2P', monospace; font-size: 0.35rem; color: var(--neon-pink); text-shadow: 0 0 4px var(--neon-pink); margin: 1px 0; }
+.connector-col { display: flex; flex-direction: column; justify-content: center; width: 30px; position: relative; }
+
+/* ── Podium (1st & 2nd after bracket completes) ────────────── */
+.podium-display {
+    display: none;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 20px;
+    padding: 16px;
+}
+.podium-display.active { display: flex; }
+
+.podium-place { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.podium-place .podium-medal  { font-size: 1.8rem; }
+.podium-place .podium-label  { font-family: 'Press Start 2P', monospace; font-size: 0.5rem; letter-spacing: 2px; }
+.podium-place .podium-number {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.podium-1st .podium-label  { color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow); }
+.podium-1st .podium-number { width: 72px; height: 72px; font-size: 1.6rem; }
+.podium-1st .podium-medal  { animation: pulse 1s infinite alternate; }
+
+.podium-2nd .podium-label  { color: #c0c0c0; text-shadow: 0 0 8px rgba(192,192,192,0.5); }
+.podium-2nd .podium-number { width: 56px; height: 56px; font-size: 1.2rem; }
+
+.podium-save-msg {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.35rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 6px var(--neon-green);
+    margin-top: 8px;
+    animation: blink 1.5s infinite;
+    text-align: center;
+}
+
+/* ── Tournament History Overlay ────────────────────────────── */
+.history-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,15,0.97);
+    z-index: 55;
+    overflow: auto;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+}
+.history-overlay.active { display: flex; }
+
+.history-overlay h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 12px var(--neon-yellow);
+    margin-bottom: 6px;
+}
+.history-overlay .bracket-sub { margin-bottom: 20px; }
+
+.tour-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.tour-history-item {
+    background: var(--arcade-panel);
+    border: 2px solid var(--pixel-border);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px), 0% 6px);
+}
+
+.tour-round-badge { font-family: 'Press Start 2P', monospace; font-size: 0.4rem; color: var(--neon-cyan); text-shadow: 0 0 6px var(--neon-cyan); min-width: 50px; }
+.tour-results     { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.tour-place       { display: flex; align-items: center; gap: 6px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: #fff; }
+.tour-place .tour-ball {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.no-history-msg {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    margin-top: 40px;
+    line-height: 1.6;
+    letter-spacing: 2px;
+}
