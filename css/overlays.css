@@ -4,6 +4,38 @@
                   overlay, and tournament history list items.
    ============================================================ */
 
+/* ── Bracket Bottom Bar (undo + back button row) ───────────── */
+.bracket-bottom-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 14px;
+    gap: 12px;
+}
+.bracket-bottom-bar .btn-back { flex: 1; }
+
+.btn-undo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    padding: 12px 18px;
+    background: rgba(255,159,28,0.12);
+    border: 2px solid #ff9f1c;
+    color: #ff9f1c;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: 0 0 6px rgba(255,159,28,0.6);
+    clip-path: polygon(4px 0%, calc(100% - 4px) 0%, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0% calc(100% - 4px), 0% 4px);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.btn-undo:hover {
+    background: rgba(255,159,28,0.25);
+    box-shadow: 0 0 16px rgba(255,159,28,0.4);
+    transform: scale(1.05);
+}
+.btn-undo:active { transform: scale(0.95); }
+
 /* ── Fullscreen & History Buttons (fixed top-right) ─────────── */
 .fullscreen-btn {
     position: fixed;

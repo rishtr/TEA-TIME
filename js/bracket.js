@@ -8,6 +8,7 @@
 // ============================================================
 
 let bracketData = null; // { rounds: [[{p1, p2, winner}, ...], ...] }
+let undoStack   = [];   // Each entry: { roundIdx, matchIdx, prevWinner, nextRoundIdx, nextMatchIdx, nextSlot }
 
 // ── Open / Close ─────────────────────────────────────────────
 
@@ -92,6 +93,7 @@ function generateBracket() {
     }
 
     bracketData = { rounds };
+    undoStack   = [];           // fresh bracket → clear undo history
     propagateByes();
     renderBracket();
 }
@@ -134,13 +136,44 @@ function selectWinner(roundIdx, matchIdx, playerSlot) {
     if (!player || match.winner)       return; // match already decided
     if (!match.p1 || !match.p2)        return; // need both players
 
+    // Save state for undo BEFORE modifying anything
+    const undoEntry = { roundIdx, matchIdx, prevWinner: null };
+    if (roundIdx < bracketData.rounds.length - 1) {
+        undoEntry.nextRoundIdx = roundIdx + 1;
+        undoEntry.nextMatchIdx = Math.floor(matchIdx / 2);
+        undoEntry.nextSlot     = matchIdx % 2 === 0 ? 'p1' : 'p2';
+    }
+    undoStack.push(undoEntry);
+
     match.winner = player;
 
     // Feed winner into the next round
-    if (roundIdx < bracketData.rounds.length - 1) {
-        const nextM    = Math.floor(matchIdx / 2);
-        const nextSlot = matchIdx % 2 === 0 ? 'p1' : 'p2';
-        bracketData.rounds[roundIdx + 1][nextM][nextSlot] = player;
+    if (undoEntry.nextSlot) {
+        bracketData.rounds[undoEntry.nextRoundIdx][undoEntry.nextMatchIdx][undoEntry.nextSlot] = player;
+    }
+
+    renderBracket();
+}
+
+/**
+ * Undo the last winner selection.
+ * Reverts the match winner and removes the propagated player from the next round.
+ */
+function undoBracket() {
+    if (undoStack.length === 0) return;
+    const entry = undoStack.pop();
+    const match = bracketData.rounds[entry.roundIdx][entry.matchIdx];
+
+    // Revert winner
+    match.winner = null;
+
+    // Remove propagated player from the next round slot
+    if (entry.nextSlot) {
+        const nextMatch = bracketData.rounds[entry.nextRoundIdx][entry.nextMatchIdx];
+        // Only clear if the next match hasn't already been decided
+        // (shouldn't happen since you'd have to undo that first, but be safe)
+        nextMatch[entry.nextSlot] = null;
+        nextMatch.winner = null;
     }
 
     renderBracket();
@@ -245,6 +278,10 @@ function renderBracket() {
     }
 
     container.innerHTML = html;
+
+    // Show / hide the undo button
+    const undoBtn = document.getElementById('undoBtn');
+    if (undoBtn) undoBtn.style.display = undoStack.length > 0 ? '' : 'none';
 
     // Reset podium/save-message until we check for completion
     document.getElementById('podiumDisplay').classList.remove('active');
