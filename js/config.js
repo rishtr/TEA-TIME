@@ -7,8 +7,8 @@ const CANVAS_SIZE = 840;
 const DOME_RADIUS = 400;
 const DOME_CX     = CANVAS_SIZE / 2;
 const DOME_CY     = CANVAS_SIZE / 2;
-const BALL_RADIUS = 17;
-const GRAVITY     = 0.35;
+const BALL_RADIUS = 16;
+const GRAVITY     = 0.1;
 const FRICTION    = 0.985;
 const BOUNCE      = 0.65;
 

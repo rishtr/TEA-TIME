@@ -236,7 +236,7 @@ function renderBracket() {
             const match    = round[m];
             const p1Winner = match.winner && match.p1 && match.winner.number === match.p1.number;
             const p2Winner = match.winner && match.p2 && match.winner.number === match.p2.number;
-            const p1Elim   = match.winner && match.p1 && !p1Winner;
+            const p1Elim   = match.winner && match.p1 && !p1Winner; 
             const p2Elim   = match.winner && match.p2 && !p2Winner;
 
             html += '<div class="match-pair">';
